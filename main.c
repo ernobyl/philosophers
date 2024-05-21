@@ -12,54 +12,96 @@
 
 #include "philo.h"
 
-int balance = 0;
-pthread_mutex_t mutex;
-
-void write_balance(int new_balance)
+int	ft_isdigit(int c)
 {
-  usleep(250000);
-  balance = new_balance;
+	if (c >= 48 && c <= 57)
+		return (1);
+	else
+		return (0);
 }
 
-int read_balance()
+int	ft_atoi(const char *str)
 {
-  usleep(250000);
-  return balance;
+	int	counter;
+	int	result;
+	int	negative;
+	int	sign;
+
+	counter = 0;
+	result = 0;
+	negative = 0;
+	sign = 0;
+	while ((str[counter] >= 9 && str[counter] <= 13) || str[counter] == ' ')
+		counter++;
+	while (str[counter] == '-' || str[counter] == '+')
+	{
+		if (str[counter++] == '-')
+			negative++;
+		sign++;
+	}
+	if (sign > 1)
+		return (0);
+	while (str[counter] >= '0' && str[counter] <= '9')
+		result = result * 10 + (str[counter++] - '0');
+	if (negative == 1)
+		return (result * -1);
+	return (result);
 }
 
-void    *deposit(void *amount)
+uint64_t  get_time_ms(void)
 {
-  pthread_mutex_lock(&mutex);
-  int account_balance = read_balance();
-  account_balance += *((int *) amount);
-  write_balance(account_balance);
-  pthread_mutex_unlock(&mutex);
-  return NULL;
+  struct timeval  tv;
+
+  if (gettimeofday(&tv, NULL))
+    return (0);
+  return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+
+
 }
 
-int main()
+void    example()
 {
-  int before = read_balance();
-  printf("Before: %d\n", before);
+    uint64_t    start_time;
+    uint64_t    now;
 
-  pthread_t thread1;
-  pthread_t thread2;
+    start_time = get_time_ms();
+    usleep(1000000);
+    now = get_time_ms();
+	printf("start time: %ld\n", start_time);
+    printf("milliseconds since start: %ld\n", now - start_time);
+}
 
-  pthread_mutex_init(&mutex, NULL);
+int	check_args(int argc, char **argv)
+{
+	int	i;
+	int	k;
 
-  int deposit1 = 300;
-  int deposit2 = 200;
+	if (argc != 5 && argc != 6)
+		return (1);
+	i = 1;
+	while (argv[i])
+	{
+		k = 0;
+		while (argv[i][k])
+		{
+			if (!ft_isdigit(argv[i][k]))
+				return (1);
+			k++;
+		}
+		if (ft_atoi(argv[i]) <= 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
-  pthread_create(&thread1, NULL, deposit, (void*) &deposit1);
-  pthread_create(&thread2, NULL, deposit, (void*) &deposit2);
-
-  pthread_join(thread1, NULL);
-  pthread_join(thread2, NULL);
-
-  pthread_mutex_destroy(&mutex);
-
-  int after = read_balance();
-  printf("After: %d\n", after);
-
-  return 0;
+int	main(int argc, char **argv)
+{
+  example();
+  if (check_args(argc, argv) == 1)
+  {
+	printf("argument count or format invalid\n");
+	return (1);
+  }
+  return (0);
 }

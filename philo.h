@@ -16,5 +16,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <stdint.h>
+#include <sys/time.h>
 
 #endif
