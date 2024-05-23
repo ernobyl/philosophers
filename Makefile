@@ -6,25 +6,35 @@
 #    By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/20 11:08:57 by emichels          #+#    #+#              #
-#    Updated: 2024/05/20 11:09:40 by emichels         ###   ########.fr        #
+#    Updated: 2024/05/23 09:53:50 by emichels         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-RM = rm -rf
-SRCS =	main.c
+NAME	:= philo
+CC		:= cc
+CFLAGS	:= -Wextra -Wall -Werror
+LIBS	:=
+SRCS	:=	main.c \
 
-$(NAME) :
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
+OBJS	:= ${SRCS:.c=.o}
 
-all : $(NAME)
+all: $(NAME)
 
-fclean : clean
-	$(RM) $(NAME)
+%.o: %.c
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-clean :
-	$(RM) $(NAME)
+$(NAME): $(OBJS)
+	@echo "Compiling philosophers..."
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 
-re : fclean all
+clean:
+	@echo "Cleaning object files..."
+	@rm -rf $(OBJS)
+
+fclean: clean
+	@echo "Cleaning everything else..."
+	@rm -rf $(NAME)
+
+re: clean all
+
+.PHONY: all, clean, fclean, re
