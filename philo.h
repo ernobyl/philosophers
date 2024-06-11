@@ -20,4 +20,23 @@
 #include <stdint.h>
 #include <sys/time.h>
 
+typedef struct	s_data
+{
+	int n_philo;
+	int t_todie;
+	int t_toeat;
+	int t_tosleep;
+	int n_eat;
+}		t_data;
+
+typedef struct	s_mutex
+{
+	pthread_mutex_t	m_print;
+	pthread_mutex_t	m_stop;
+	pthread_mutex_t	m_eat;
+	pthread_mutex_t	m_dead;
+}					t_mutex;
+
+
+
 #endif
