@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 11:09:57 by emichels          #+#    #+#             */
-/*   Updated: 2024/05/20 12:22:49 by emichels         ###   ########.fr       */
+/*   Updated: 2024/05/23 09:57:55 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,27 +53,25 @@ int	ft_atoi(const char *str)
 	return (result);
 }
 
-uint64_t  get_time_ms(void)
+uint64_t	get_time_ms(void)
 {
-  struct timeval  tv;
+	struct timeval	tv;
 
-  if (gettimeofday(&tv, NULL))
-    return (0);
-  return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
-
-
+	if (gettimeofday(&tv, NULL))
+		return (0);
+	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
 }
 
-void    example()
+void	example(void)
 {
-    uint64_t    start_time;
-    uint64_t    now;
+	uint64_t	start_time;
+	uint64_t	now;
 
-    start_time = get_time_ms();
-    usleep(1000000);
-    now = get_time_ms();
-	printf("start time: %ld\n", start_time);
-    printf("milliseconds since start: %ld\n", now - start_time);
+	start_time = get_time_ms();
+	usleep(1000000);
+	now = get_time_ms();
+	printf("start time: %llu\n", start_time);
+	printf("milliseconds since start: %llu\n", now - start_time);
 }
 
 int	check_args(int argc, char **argv)

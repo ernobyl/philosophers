@@ -15,4 +15,6 @@ fclean : clean
 clean :
 	$(RM) $(NAME)
 
-re : fclean all
+re: clean all
+
+.PHONY: all, clean, fclean, re
