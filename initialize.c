@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/18 14:58:58 by root              #+#    #+#             */
-/*   Updated: 2024/06/18 15:23:17 by root             ###   ########.fr       */
+/*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
+/*   Updated: 2024/06/24 11:41:40 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	init_mutexes(t_mutex *mutex)
 	return (0);
 }
 
-int	data_init(char **argv, t_data *data)
+int	init_data(char **argv, t_data *data)
 {
 	data->n_philo = ft_atoi(argv[1]);
 	data->t_todie = ft_atoi(argv[2]);
@@ -37,6 +37,35 @@ int	data_init(char **argv, t_data *data)
 			return (1);
 	}
 	data->philo = malloc(sizeof(t_philo) * data->n_philo);
-	
+	if (data->philo == NULL)
+		return (1);
+	return (0);
+}
+
+int	init_philos(t_data *data)
+{
+	int	i;
+
+	data->start_time = get_time_ms();
+	i = -1;
+	while (++i < data->n_philo)
+	{
+		data->philo[i].n = i + 1;
+		data->philo[i].last_eat = 0;
+		data->philo[i].fork_r = NULL;
+		data->philo[i].info = data;
+		data->philo[i].m_count = 0;
+		pthread_mutex_init(&(data->philo[i].fork_l), NULL);
+		if (i == data->n_philo - 1)
+			data->philo[i].fork_r = &data->philo[0].fork_l;
+		else
+			data->philo[i].fork_r = &data->philo[i - 1].fork_l;
+		if (pthread_create(&data->philo[i].thread, NULL, &cycle, &(data->philo[i])) != 0)
+			return (1);
+	}
+	i = -1;
+	while (++i < data->n_philo)
+		if (pthread_join(data->philo[i].thread, NULL) != 0)
+			return (1);
 	return (0);
 }

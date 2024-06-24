@@ -1,10 +1,12 @@
 NAME = philo
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 RM = rm -rf
 SRCS =	main.c \
 		initialize.c \
 		utils.c \
+		data_utils.c \
+		philo_cycle.c \
 
 $(NAME) :
 	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)

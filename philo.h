@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 11:12:46 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/18 15:26:17 by root             ###   ########.fr       */
+/*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
+/*   Updated: 2024/06/24 12:06:19 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <stdint.h>
+# include <limits.h>
 # include <sys/time.h>
 # include <stdbool.h>
 
@@ -28,7 +29,7 @@ typedef struct	s_philo
 	bool			is_eating;
 	pthread_t		thread;
 	long int		last_eat;
-	struct l_info	*info;
+	t_data			*data;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	fork_l;
 }					t_philo;
@@ -43,19 +44,26 @@ typedef struct	s_mutex
 
 typedef struct	s_data
 {
-	int 	n_philo;
-	int 	t_todie;
-	int 	t_toeat;
-	int 	t_tosleep;
-	int 	n_eat;
-	t_mutex	*mutex;
-	t_philo	*philo;
-}			t_data;
+	uint64_t	start_time;
+	int 		n_philo;
+	int 		t_todie;
+	int 		t_toeat;
+	int 		t_tosleep;
+	int 		n_eat;
+	t_mutex		*mutex;
+	t_philo		*philo;
+	int			stop;
+}				t_data;
 
-int	ft_atoi(const char *str);
-int	return_error(char *msg);
-int	check_args(int argc, char **argv);
-int	data_init(char **argv, t_data *data);
-int	init_mutexes(t_mutex *mutex);
+int			ft_atoi(const char *str);
+int			return_error(char *msg);
+int			check_args(int argc, char **argv);
+uint64_t	get_time_ms(void);
+void		ft_usleep(int ms);
+int			mutex_philo_death(t_philo *philo, int nb);
+void		mutex_print(t_philo *philo, char *str);
+int			init_data(char **argv, t_data *data);
+int			init_mutexes(t_mutex *mutex);
+int			init_philos(t_data *data);
 
 #endif
