@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 11:41:40 by emichels         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:50:27 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	init_data(char **argv, t_data *data)
 		if ((data->n_eat = ft_atoi(argv[5])) == 0)
 			return (1);
 	}
+	data->philo_eat = 0;
 	data->philo = malloc(sizeof(t_philo) * data->n_philo);
 	if (data->philo == NULL)
 		return (1);
@@ -53,7 +54,7 @@ int	init_philos(t_data *data)
 		data->philo[i].n = i + 1;
 		data->philo[i].last_eat = 0;
 		data->philo[i].fork_r = NULL;
-		data->philo[i].info = data;
+		data->philo[i].data = data;
 		data->philo[i].m_count = 0;
 		pthread_mutex_init(&(data->philo[i].fork_l), NULL);
 		if (i == data->n_philo - 1)

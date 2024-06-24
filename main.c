@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:49 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 11:45:12 by emichels         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:57:31 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 		return (return_error("failed to initialize mutexes"));
 	}
 	data.mutex = &mutex;
-	free(data.philo);
+	init_philos(&data);
+	free_data(&data);
 	return (0);
 }

@@ -8,16 +8,25 @@ SRCS =	main.c \
 		data_utils.c \
 		philo_cycle.c \
 
-$(NAME) :
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
+OBJS	:= ${SRCS:.c=.o}
 
-all : $(NAME)
+all: $(NAME)
 
-fclean : clean
-	$(RM) $(NAME)
+%.o: %.c
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
-clean :
-	$(RM) $(NAME)
+$(NAME): $(OBJS)
+	@echo "Compiling Philosophers..."
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	@echo "Done!"
+
+clean:
+	@echo "Cleaning object files..."
+	@rm -rf $(OBJS)
+
+fclean: clean
+	@echo "Cleaning everything else..."
+	@rm -rf $(NAME)
 
 re: clean all
 

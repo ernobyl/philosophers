@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 12:06:19 by emichels         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:10:58 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct	s_philo
 	bool			is_eating;
 	pthread_t		thread;
 	long int		last_eat;
-	t_data			*data;
+	struct s_data	*data;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	fork_l;
 }					t_philo;
@@ -53,6 +53,7 @@ typedef struct	s_data
 	t_mutex		*mutex;
 	t_philo		*philo;
 	int			stop;
+	int			philo_eat;
 }				t_data;
 
 int			ft_atoi(const char *str);
@@ -65,5 +66,7 @@ void		mutex_print(t_philo *philo, char *str);
 int			init_data(char **argv, t_data *data);
 int			init_mutexes(t_mutex *mutex);
 int			init_philos(t_data *data);
+void		*cycle(void *phi);
+void		free_data(t_data *data);
 
 #endif
