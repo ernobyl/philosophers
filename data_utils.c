@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: emichels <emichels@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:44:31 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 16:27:59 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:56:45 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ void	mutex_print(t_philo *philo, char *str)
 	time = get_time_ms() - philo->data->start_time;
 	if (!philo->data->stop && (long)time >= 0 \
 			&& (long)time <= INT_MAX && !mutex_philo_death(philo, 0))
-		printf("%lu Philosopher no. %d %s", get_time_ms() - philo->data->start_time, philo->n, str);
+		printf("%lu %d %s", get_time_ms() - philo->data->start_time, philo->n, str);
 	pthread_mutex_unlock(&(philo->data->mutex->m_print));
 }

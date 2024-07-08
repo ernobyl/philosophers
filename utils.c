@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:06 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 10:45:13 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:49:12 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,33 +26,34 @@ static int	ft_isdigit(int c)
 		return (0);
 }
 
-int	ft_atoi(const char *str)
+long	philo_atol(const char *str)
 {
-	int	counter;
-	int	result;
-	int	negative;
-	int	sign;
+	long	i;
+	long	result;
+	int		negative;
+	int		sign;
 
-	counter = 0;
+	i = 0;
 	result = 0;
 	negative = 0;
 	sign = 0;
-	while ((str[counter] >= 9 && str[counter] <= 13) || str[counter] == ' ')
-		counter++;
-	while (str[counter] == '-' || str[counter] == '+')
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	while (str[i] == '-' || str[i] == '+')
 	{
-		if (str[counter++] == '-')
+		if (str[i++] == '-')
 			negative++;
 		sign++;
 	}
 	if (sign > 1)
 		return (0);
-	while (str[counter] >= '0' && str[counter] <= '9')
-		result = result * 10 + (str[counter++] - '0');
-	if (negative == 1)
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + (str[i++] - '0');
+	if (negative == 1 || result > INT_MAX)
 		return (result * -1);
 	return (result);
 }
+
 int	check_args(int argc, char **argv)
 {
 	int	i;
@@ -70,7 +71,7 @@ int	check_args(int argc, char **argv)
 				return (1);
 			k++;
 		}
-		if (ft_atoi(argv[i]) < 0)
+		if (philo_atol(argv[i]) < 0)
 			return (1);
 		i++;
 	}

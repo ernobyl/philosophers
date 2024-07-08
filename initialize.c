@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 15:50:27 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:48:55 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	init_mutexes(t_mutex *mutex)
 
 int	init_data(char **argv, t_data *data)
 {
-	data->n_philo = ft_atoi(argv[1]);
-	data->t_todie = ft_atoi(argv[2]);
-	data->t_toeat = ft_atoi(argv[3]);
-	data->t_tosleep = ft_atoi(argv[4]);
+	data->n_philo = philo_atol(argv[1]);
+	data->t_todie = philo_atol(argv[2]);
+	data->t_toeat = philo_atol(argv[3]);
+	data->t_tosleep = philo_atol(argv[4]);
 	if (argv[5])
 	{
-		if ((data->n_eat = ft_atoi(argv[5])) == 0)
+		if ((data->n_eat = philo_atol(argv[5])) == 0)
 			return (1);
 	}
 	data->philo_eat = 0;
