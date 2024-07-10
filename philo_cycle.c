@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/06/24 16:26:32 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:44:15 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 static void	mutex_iseating(t_philo *philo)
 {
 	mutex_print(philo, " is eating\n");
-	pthread_mutex_lock(&(philo->data->mutex->m_eat));
+	pthread_mutex_lock(&(philo->data->m_eat));
 	philo->last_eat = get_time_ms();
 	philo->m_count++;
-	pthread_mutex_unlock(&(philo->data->mutex->m_eat));
+	pthread_mutex_unlock(&(philo->data->m_eat));
 	ft_usleep(philo->data->t_toeat);
 	pthread_mutex_unlock((philo->fork_r));
 	pthread_mutex_unlock(&(philo->fork_l));
@@ -46,18 +46,18 @@ static void	*mutex_isdead(void *phi)
 
 	philo = (t_philo *)phi;
 	ft_usleep(philo->data->t_todie + 1);
-	pthread_mutex_lock(&philo->data->mutex->m_eat);
-	pthread_mutex_lock(&philo->data->mutex->m_stop);
+	pthread_mutex_lock(&philo->data->m_eat);
+	pthread_mutex_lock(&philo->data->m_stop);
 	if (!mutex_philo_death(philo, 0) && (long)get_time_ms() - \
 			philo->last_eat >= ((long)philo->data->t_todie))
 	{
-		pthread_mutex_unlock(&philo->data->mutex->m_eat);
-		pthread_mutex_unlock(&philo->data->mutex->m_stop);
+		pthread_mutex_unlock(&philo->data->m_eat);
+		pthread_mutex_unlock(&philo->data->m_stop);
 		mutex_print(philo, " died\n");
 		mutex_philo_death(philo, 1);
 	}
-	pthread_mutex_unlock(&philo->data->mutex->m_eat);
-	pthread_mutex_unlock(&philo->data->mutex->m_stop);
+	pthread_mutex_unlock(&philo->data->m_eat);
+	pthread_mutex_unlock(&philo->data->m_stop);
 	return (NULL);
 }
 
@@ -68,7 +68,7 @@ void	*cycle(void *phi)
 
 	philo = (t_philo *)phi;
 	if (philo->n % 2 == 0)
-		ft_usleep(philo->data->t_toeat / 10);
+		ft_usleep(philo->data->t_toeat - 10);
 	while (!mutex_philo_death(philo, 0))
 	{
 		pthread_create(&t, NULL, mutex_isdead, phi);
@@ -77,13 +77,13 @@ void	*cycle(void *phi)
 		pthread_detach(t);
 		if (philo->m_count == philo->data->n_eat)
 		{
-			pthread_mutex_lock(&philo->data->mutex->m_stop);
+			pthread_mutex_lock(&philo->data->m_stop);
 			if (++philo->data->philo_eat == philo->data->n_philo)
 			{
-				pthread_mutex_unlock(&philo->data->mutex->m_stop);
+				pthread_mutex_unlock(&philo->data->m_stop);
 				mutex_philo_death(philo, 2);
 			}
-			pthread_mutex_unlock(&philo->data->mutex->m_stop);
+			pthread_mutex_unlock(&philo->data->m_stop);
 			return (NULL);
 		}
 	}

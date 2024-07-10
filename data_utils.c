@@ -3,72 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   data_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emichels <emichels@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 11:44:31 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/03 10:56:45 by emichels         ###   ########.fr       */
+/*   Created: 2024/07/10 09:49:39 by emichels          #+#    #+#             */
+/*   Updated: 2024/07/10 13:55:27 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-uint64_t	get_time_ms(void)
+long	get_time_ms(void)
 {
 	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 void	ft_usleep(int ms)
 {
-	uint64_t	time;
+	long	time;
 	
 	time = get_time_ms();
-	while (get_time_ms() - time < (unsigned int)ms)
-		usleep(ms / 10);
+	while (get_time_ms() - time < ms)
+		usleep(500);
 }
 
 void	free_data(t_data *data)
 {
 	int	i;
 
-	i = 0;
-	while (i < data->n_philo)
+	i = -1;
+	while (++i < data->n_philo)
 	{
-		pthread_mutex_destroy(&data->philo[i].fork_l);
-		pthread_mutex_destroy(data->philo[i].fork_r);
-		i++;
+		if (pthread_mutex_destroy(&data->philo[i].fork_l) != 0)
+			printf("Error destroying fork_l mutex\n");
+		if (data->philo[i].fork_r && pthread_mutex_destroy(data->philo[i].fork_r) != 0)
+            printf("Error destroying fork_r mutex\n");
 	}
+	pthread_mutex_destroy(&data->m_print);
+	pthread_mutex_destroy(&data->m_stop);
+	pthread_mutex_destroy(&data->m_eat);
+	pthread_mutex_destroy(&data->m_dead);
 	free(data->philo);
-	pthread_mutex_destroy(&data->mutex->m_print);
-	pthread_mutex_destroy(&data->mutex->m_stop);
-	pthread_mutex_destroy(&data->mutex->m_eat);
-	pthread_mutex_destroy(&data->mutex->m_dead);
 }
 
 int	mutex_philo_death(t_philo *philo, int nb)
 {
-	pthread_mutex_lock(&philo->data->mutex->m_dead);
+	pthread_mutex_lock(&philo->data->m_dead);
 	if (nb)
 		philo->data->stop = 1;
 	if (philo->data->stop)
 	{
-		pthread_mutex_unlock(&philo->data->mutex->m_dead);
+		pthread_mutex_unlock(&philo->data->m_dead);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->data->mutex->m_dead);
+	pthread_mutex_unlock(&philo->data->m_dead);
 	return (0);
 }
 
 void	mutex_print(t_philo *philo, char *str)
 {
-	uint64_t	time;
+	long	time;
 
-	pthread_mutex_lock(&(philo->data->mutex->m_print));
+	pthread_mutex_lock(&(philo->data->m_print));
 	time = get_time_ms() - philo->data->start_time;
-	if (!philo->data->stop && (long)time >= 0 \
-			&& (long)time <= INT_MAX && !mutex_philo_death(philo, 0))
-		printf("%lu %d %s", get_time_ms() - philo->data->start_time, philo->n, str);
-	pthread_mutex_unlock(&(philo->data->mutex->m_print));
+	if (!philo->data->stop && time >= 0 \
+			&& time <= INT_MAX && !mutex_philo_death(philo, 0))
+		printf("%ld %d %s", get_time_ms() - philo->data->start_time, philo->n, str);
+	pthread_mutex_unlock(&(philo->data->m_print));
 }

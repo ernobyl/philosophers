@@ -6,27 +6,35 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/08 14:48:55 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:43:24 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_mutexes(t_mutex *mutex)
-{
-	if (pthread_mutex_init(&mutex->m_print, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&mutex->m_stop, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&mutex->m_eat, NULL) != 0)
-		return (1);
-	if (pthread_mutex_init(&mutex->m_dead, NULL) != 0)
-		return (1);
-	return (0);
-}
+// int	init_mutexes(t_mutex *mutex)
+// {
+// 	if (pthread_mutex_init(&mutex->m_print, NULL) != 0)
+// 		return (1);
+// 	if (pthread_mutex_init(&mutex->m_stop, NULL) != 0)
+// 		return (1);
+// 	if (pthread_mutex_init(&mutex->m_eat, NULL) != 0)
+// 		return (1);
+// 	if (pthread_mutex_init(&mutex->m_dead, NULL) != 0)
+// 		return (1);
+// 	return (0);
+// }
 
 int	init_data(char **argv, t_data *data)
 {
+	if (pthread_mutex_init(&data->m_print, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->m_stop, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->m_eat, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->m_dead, NULL) != 0)
+		return (1);
 	data->n_philo = philo_atol(argv[1]);
 	data->t_todie = philo_atol(argv[2]);
 	data->t_toeat = philo_atol(argv[3]);
