@@ -6,6 +6,7 @@ SRCS =	main.c \
 		initialize.c \
 		utils.c \
 		data_utils.c \
+		philo_utils.c \
 		philo_cycle.c \
 
 OBJS	:= ${SRCS:.c=.o}
