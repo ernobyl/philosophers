@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:49 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/12 13:44:45 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:43:59 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	main(int argc, char **argv)
 	t_data	*data;
 	//t_mutex	mutex;
 
+	if (philo_atol(argv[1]) > 200)
+		return (return_error("max amount of philos = 200"));
 	if (check_args(argc, argv) == 1)
 		return (return_error("arg count or format invalid"));
 	if (philo_atol(argv[1]) == 1)
