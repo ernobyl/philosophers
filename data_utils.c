@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 09:49:39 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/12 14:40:26 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:45:31 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,17 @@ long	get_time_ms(void)
 	return ((tv.tv_sec * 1000 + tv.tv_usec / 1000) - time);
 }
 
-void	ft_usleep(int ms)
+void	ft_usleep(t_data *data, int ms)
 {
 	long	time;
-	
+
 	time = get_time_ms();
 	while (get_time_ms() - time < ms)
-		usleep(ms / 10);
+	{
+		if (data->stop)
+			break ;
+		usleep(5);
+	}
 }
 
 void	free_data(t_data *data)

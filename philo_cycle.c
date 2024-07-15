@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/12 14:41:57 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:48:50 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	take_fork(t_philo *philo)
 	print_action(*philo, FORK);
 	print_action(*philo, EAT);
 	pthread_mutex_lock(&philo->data->monitor);
-	philo->t_eat++;
 	philo->last_eat = get_time_ms();
 	pthread_mutex_unlock(&philo->data->monitor);
-	ft_usleep(philo->data->t_toeat);
+	ft_usleep(philo->data, philo->data->t_toeat);
+	philo->t_eat++;
 	return (1);
 }
 
@@ -71,7 +71,7 @@ int	put_fork(t_philo *philo)
 	if (check_death(philo))
 		return (0);
 	print_action(*philo, SLEEP);
-	ft_usleep(philo->data->t_tosleep);
+	ft_usleep(philo->data, philo->data->t_tosleep);
 	if (check_death(philo))
 		return (0);
 	print_action(*philo, THINK);
@@ -84,6 +84,8 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	// if (philo->data->n_philo % 2 == 0)
+	// 	ft_usleep(100);
 	while (1)
 	{
 		if (!take_fork(philo))
@@ -103,7 +105,7 @@ void	cycle(t_data *data)
 	{
 		pthread_create(&data->philo[i].thread, NULL, routine,
 			&data->philo[i]);
-		usleep(5);
+		ft_usleep(data, data->t_toeat - 10);
 	}
 	while (1)
 	{

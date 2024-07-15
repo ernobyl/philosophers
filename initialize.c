@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/12 13:59:46 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:53:20 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,45 @@ t_philo	init_philo(int n, t_data *data)
 	return (philo);
 }
 
+static int	safe_init_mutexes(t_data *data)
+{
+	if (pthread_mutex_init(&data->monitor, NULL) != 0)
+	{
+		free(data);
+		return (1);
+	}
+	if (pthread_mutex_init(&data->m_print, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->monitor);
+		free(data);
+		return (1);
+	}
+	return (0);
+}
+
+static int	safe_init_forks(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->n_philo)
+	{
+		if (pthread_mutex_init(&data->fork[i], NULL) != 0)
+		{
+			while (--i > -1)
+				pthread_mutex_destroy(&data->fork[i]);
+			
+			free(data);
+			return (1);
+		}
+		data->philo[i] = init_philo(i, data);
+		data->philo[i].data = data;
+	}
+	return (0);
+}
+
 t_data	*initialize(int argc, char **argv)
 {
-	int				i;
 	t_data			*data;
 
 	data = malloc(sizeof(t_data));
@@ -38,19 +74,13 @@ t_data	*initialize(int argc, char **argv)
 	data->t_toeat = philo_atol(argv[3]);
 	data->t_tosleep = philo_atol(argv[4]);
 	data->stop = 0;
-	pthread_mutex_init(&data->monitor, NULL);
-	pthread_mutex_init(&data->m_print, NULL);
+	if (safe_init_mutexes(data) == 1)
+		return (NULL);
 	if (argc == 6)
 		data->n_eat = philo_atol(argv[5]);
 	else
 		data->n_eat = -1;
-	//data->philo = malloc(sizeof(t_philo) * data->n_philo);
-	i = -1;
-	while (++i < data->n_philo)
-	{
-		pthread_mutex_init(&data->fork[i], NULL);
-		data->philo[i] = init_philo(i, data);
-		data->philo[i].data = data;
-	}
+	if (safe_init_forks(data) == 1)
+		return (NULL);
 	return (data);
 }
