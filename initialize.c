@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/15 14:53:20 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 11:30:22 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_philo	init_philo(int n, t_data *data)
 	philo.n = n + 1;
 	philo.fork_l = &data->fork[n];
 	philo.fork_r = &data->fork[(n + 1) % data->n_philo];
-	philo.t_eat = 0;
+	philo.n_eaten = 0;
 	philo.thread = 0;
 	philo.last_eat = get_time_ms();
 	return (philo);

@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/15 16:55:29 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:59:36 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ void	update_end(t_data *data)
 	{
 		if (get_time_ms() - data->philo[i].last_eat > data->t_todie)
 		{
-			print_action(data->philo[i], DIE);
-			data->stop = 1;
+			if (!data->stop)
+			{
+				print_action(data->philo[i], DIE);
+				data->stop = 1;
+			}
 			break ;
 		}
 		if (data->philo[i].t_eat < min)
@@ -86,8 +89,8 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	// if (philo->data->n_philo % 2 == 0)
-	// ft_usleep(philo->data, philo->data->t_toeat - 10);
+	if (philo->data->n_philo % 2 == 0)
+		ft_usleep(philo->data, philo->data->t_toeat - 10);
 	while (1)
 	{
 		if (!take_fork(philo))
@@ -107,7 +110,7 @@ void	cycle(t_data *data)
 	{
 		pthread_create(&data->philo[i].thread, NULL, routine,
 			&data->philo[i]);
-		usleep(data->t_toeat / 10);
+		//ft_usleep(data, data->t_toeat - 10);
 	}
 	while (1)
 	{

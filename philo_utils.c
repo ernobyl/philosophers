@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:34:48 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/15 09:56:18 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:50:58 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ int	min(int a, int b)
 void	print_action(t_philo philo, int action)
 {
 	pthread_mutex_lock(&philo.data->m_print);
+	if (philo.data->stop)
+	{
+		pthread_mutex_unlock(&philo.data->m_print);
+		return ;
+	}
+	//pthread_mutex_lock(&philo.data->m_print);
 	if (action == FORK)
 		printf("%ld %d has taken a fork\n", get_time_ms(), philo.n);
 	else if (action == EAT)

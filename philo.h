@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/15 16:55:57 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 11:25:18 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@
 typedef struct s_philo
 {
 	int				n;
-	int				t_eat;
+	int				n_eaten;
 	pthread_t		thread;
 	long int		last_eat;
 	struct s_data	*data;
 	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*fork_l;
-	//pthread_mutex_t	eat;
 }					t_philo;
 
 typedef struct s_data
@@ -47,11 +46,11 @@ typedef struct s_data
 	int				t_tosleep;
 	int				n_eat;
 	int				stop;
-	t_philo			philo[200];
+	t_philo			*philo;
 	int				philo_eat;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	monitor;
-	pthread_mutex_t	fork[200];
+	pthread_mutex_t	*fork;
 }					t_data;
 
 long	philo_atol(const char *str);
