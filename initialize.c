@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 11:30:22 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:44:36 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,25 +62,29 @@ static int	safe_init_forks(t_data *data)
 	return (0);
 }
 
-t_data	*initialize(int argc, char **argv)
+int	initialize(t_data *data, int argc, char **argv)
 {
-	t_data			*data;
-
-	data = malloc(sizeof(t_data));
-	if (!data)
-		return (NULL);
 	data->n_philo = philo_atol(argv[1]);
 	data->t_todie = philo_atol(argv[2]);
 	data->t_toeat = philo_atol(argv[3]);
 	data->t_tosleep = philo_atol(argv[4]);
 	data->stop = 0;
+	data->philo = ft_calloc(data->n_philo, (sizeof(t_philo)));
+	if (data->philo == NULL)
+		return (1);
+	data->fork = ft_calloc(data->n_philo, (sizeof(pthread_mutex_t)));
+	if (data->fork == NULL)
+	{
+		free(data->philo);
+		return (1);
+	}
 	if (safe_init_mutexes(data) == 1)
-		return (NULL);
+		return (1);
 	if (argc == 6)
 		data->n_eat = philo_atol(argv[5]);
 	else
 		data->n_eat = -1;
 	if (safe_init_forks(data) == 1)
-		return (NULL);
-	return (data);
+		return (1);
+	return (0);
 }

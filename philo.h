@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 11:25:18 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:41:39 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,14 @@ typedef struct s_data
 	pthread_mutex_t	*fork;
 }					t_data;
 
+void	*ft_calloc(size_t count, size_t size);
 long	philo_atol(const char *str);
 int		return_error(char *msg);
 int		check_args(int argc, char **argv);
 void	one_philo(char **argv);
 long	get_time_ms(void);
 void	ft_usleep(t_data *data, int ms);
-t_data	*initialize(int argc, char **argv);
+int		initialize(t_data *data, int argc, char **argv);
 t_philo	init_philo(int n, t_data *data);
 void	cycle(t_data *data);
 void	print_action(t_philo philo, int action);

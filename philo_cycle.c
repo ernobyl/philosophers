@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 10:59:36 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:17:21 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	update_end(t_data *data)
 	int	min;
 
 	pthread_mutex_lock(&data->monitor);
-	min = data->philo[0].t_eat;
+	min = data->philo[0].n_eaten;
 	i = -1;
 	while (++i < data->n_philo)
 	{
@@ -31,8 +31,8 @@ void	update_end(t_data *data)
 			}
 			break ;
 		}
-		if (data->philo[i].t_eat < min)
-			min = data->philo[i].t_eat;
+		if (data->philo[i].n_eaten < min)
+			min = data->philo[i].n_eaten;
 	}
 	if (min == data->n_eat)
 		data->stop = 1;
@@ -56,7 +56,8 @@ int	take_fork(t_philo *philo)
 		pthread_mutex_unlock(&philo->data->fork[max(philo->n - 1, philo->n
 				% philo->data->n_philo)]);
 		return (0);
-	}	pthread_mutex_lock(&philo->data->monitor);
+	}
+	pthread_mutex_lock(&philo->data->monitor);
 	philo->last_eat = get_time_ms();
 	pthread_mutex_unlock(&philo->data->monitor);
 	print_action(*philo, FORK);
@@ -65,7 +66,7 @@ int	take_fork(t_philo *philo)
 	philo->last_eat = get_time_ms();
 	pthread_mutex_unlock(&philo->data->monitor);
 	ft_usleep(philo->data, philo->data->t_toeat);
-	philo->t_eat++;
+	philo->n_eaten++;
 	return (1);
 }
 
@@ -89,7 +90,7 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->data->n_philo % 2 == 0)
+	if (philo->n % 2 == 0)
 		ft_usleep(philo->data, philo->data->t_toeat - 10);
 	while (1)
 	{
@@ -110,7 +111,8 @@ void	cycle(t_data *data)
 	{
 		pthread_create(&data->philo[i].thread, NULL, routine,
 			&data->philo[i]);
-		//ft_usleep(data, data->t_toeat - 10);
+		// if (data->n_philo % 2 == 0)
+		// 	ft_usleep(data, data->t_toeat - 10);
 	}
 	while (1)
 	{

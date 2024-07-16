@@ -3,6 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 SRCS =	main.c \
+		check_args.c \
 		initialize.c \
 		utils.c \
 		data_utils.c \

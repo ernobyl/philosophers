@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:06 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 11:40:55 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/16 14:20:04 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@ int	return_error(char *msg)
 {
 	printf("%s\n", msg);
 	return (1);
-}
-
-static int	ft_isdigit(int c)
-{
-	if (c >= 48 && c <= 57)
-		return (1);
-	else
-		return (0);
 }
 
 long	philo_atol(const char *str)
@@ -54,26 +46,23 @@ long	philo_atol(const char *str)
 	return (result);
 }
 
-int	check_args(int argc, char **argv)
+static void	*ft_memset(void *b, int c, size_t len)
 {
-	int	i;
-	int	k;
+	unsigned char	*a;
 
-	if (argc != 5 && argc != 6)
-		return (1);
-	i = 1;
-	while (argv[i])
-	{
-		k = 0;
-		while (argv[i][k])
-		{
-			if (!ft_isdigit(argv[i][k]))
-				return (1);
-			k++;
-		}
-		if (philo_atol(argv[i]) < 0)
-			return (1);
-		i++;
-	}
-	return (0);
+	a = b;
+	while (len--)
+		*a++ = c;
+	return (b);
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(count * size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_memset(ptr, '\0', size);
+	return (ptr);
 }
