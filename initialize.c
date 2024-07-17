@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 15:44:36 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 12:03:21 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static int	safe_init_forks(t_data *data)
 		{
 			while (--i > -1)
 				pthread_mutex_destroy(&data->fork[i]);
-			
 			free(data);
 			return (1);
 		}

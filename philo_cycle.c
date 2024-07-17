@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 15:17:21 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 12:30:28 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,23 @@ void	update_end(t_data *data)
 
 int	take_fork(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->fork[min(philo->n - 1, philo->n
-			% philo->data->n_philo)]);
+	pthread_mutex_lock(philo->fork_l);
 	if (check_death(philo))
-		return (pthread_mutex_unlock(&philo->data->fork[min(philo->n - 1,
-						philo->n % philo->data->n_philo)]), 0);
+		return (pthread_mutex_unlock(philo->fork_l), 0);
 	print_action(*philo, FORK);
-	pthread_mutex_lock(&philo->data->fork[max(philo->n - 1, philo->n
-			% philo->data->n_philo)]);
+	pthread_mutex_lock(philo->fork_r);
 	if (check_death(philo))
 	{
-		pthread_mutex_unlock(&philo->data->fork[min(philo->n - 1, philo->n
-				% philo->data->n_philo)]);
-		pthread_mutex_unlock(&philo->data->fork[max(philo->n - 1, philo->n
-				% philo->data->n_philo)]);
+		pthread_mutex_unlock(philo->fork_l);
+		pthread_mutex_unlock(philo->fork_r);
 		return (0);
 	}
-	pthread_mutex_lock(&philo->data->monitor);
-	philo->last_eat = get_time_ms();
-	pthread_mutex_unlock(&philo->data->monitor);
 	print_action(*philo, FORK);
-	print_action(*philo, EAT);
 	pthread_mutex_lock(&philo->data->monitor);
 	philo->last_eat = get_time_ms();
+	print_action(*philo, EAT);
 	pthread_mutex_unlock(&philo->data->monitor);
-	ft_usleep(philo->data, philo->data->t_toeat);
+	ft_usleep(philo->data->t_toeat);
 	philo->n_eaten++;
 	return (1);
 }
@@ -77,7 +69,7 @@ int	put_fork(t_philo *philo)
 	if (check_death(philo))
 		return (0);
 	print_action(*philo, SLEEP);
-	ft_usleep(philo->data, philo->data->t_tosleep);
+	ft_usleep(philo->data->t_tosleep);
 	if (check_death(philo))
 		return (0);
 	print_action(*philo, THINK);
@@ -90,14 +82,23 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->n % 2 == 0)
-		ft_usleep(philo->data, philo->data->t_toeat - 10);
-	while (1)
+	if (philo->data->n_philo == 1)
 	{
-		if (!take_fork(philo))
-			break ;
-		if (!put_fork(philo))
-			break ;
+		print_action(*philo, FORK);
+		ft_usleep(philo->data->t_todie);
+		print_action(*philo, DIE);
+	}
+	else
+	{
+		if (philo->n % 2 == 0)
+			ft_usleep(philo->data->t_toeat - 10);
+		while (1)
+		{
+			if (!take_fork(philo))
+				break ;
+			if (!put_fork(philo))
+				break ;
+		}
 	}
 	return (NULL);
 }
@@ -111,10 +112,8 @@ void	cycle(t_data *data)
 	{
 		pthread_create(&data->philo[i].thread, NULL, routine,
 			&data->philo[i]);
-		// if (data->n_philo % 2 == 0)
-		// 	ft_usleep(data, data->t_toeat - 10);
 	}
-	while (1)
+	while (1 && data->n_philo != 1)
 	{
 		update_end(data);
 		if (data->stop)

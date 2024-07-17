@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 15:41:39 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 12:18:09 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,14 @@ void	*ft_calloc(size_t count, size_t size);
 long	philo_atol(const char *str);
 int		return_error(char *msg);
 int		check_args(int argc, char **argv);
-void	one_philo(char **argv);
+void	*routine(void *arg);
 long	get_time_ms(void);
-void	ft_usleep(t_data *data, int ms);
+void	ft_usleep(int ms);
 int		initialize(t_data *data, int argc, char **argv);
 t_philo	init_philo(int n, t_data *data);
 void	cycle(t_data *data);
 void	print_action(t_philo philo, int action);
 void	free_data(t_data *data);
-int		min(int a, int b);
-int		max(int a, int b);
 int		check_death(t_philo *philo);
 
 #endif
