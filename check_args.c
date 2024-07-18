@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 13:28:42 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/16 13:29:52 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:22:13 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_args(int argc, char **argv)
 				return (1);
 			k++;
 		}
-		if (philo_atol(argv[i]) < 0)
+		if (philo_atol(argv[i]) <= 0)
 			return (1);
 		i++;
 	}

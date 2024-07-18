@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:59 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/17 12:03:21 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:38:15 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,15 @@ static int	safe_init_mutexes(t_data *data)
 {
 	if (pthread_mutex_init(&data->monitor, NULL) != 0)
 	{
-		free(data);
+		free(data->philo);
+		free(data->fork);
 		return (1);
 	}
 	if (pthread_mutex_init(&data->m_print, NULL) != 0)
 	{
 		pthread_mutex_destroy(&data->monitor);
-		free(data);
+		free(data->philo);
+		free(data->fork);
 		return (1);
 	}
 	return (0);
@@ -52,7 +54,8 @@ static int	safe_init_forks(t_data *data)
 		{
 			while (--i > -1)
 				pthread_mutex_destroy(&data->fork[i]);
-			free(data);
+			free(data->philo);
+			free(data->fork);
 			return (1);
 		}
 		data->philo[i] = init_philo(i, data);

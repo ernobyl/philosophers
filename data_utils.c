@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 09:49:39 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/17 12:17:50 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/18 09:39:49 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_usleep(int ms)
 
 	time = get_time_ms();
 	while (get_time_ms() - time < ms)
-		usleep(10);
+		usleep(100);
 }
 
 void	free_data(t_data *data)

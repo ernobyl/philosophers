@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:25 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/17 12:18:09 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/18 10:02:00 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <pthread.h>
-# include <stdint.h>
 # include <limits.h>
 # include <sys/time.h>
 
@@ -47,7 +46,6 @@ typedef struct s_data
 	int				n_eat;
 	int				stop;
 	t_philo			*philo;
-	int				philo_eat;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	monitor;
 	pthread_mutex_t	*fork;
@@ -62,7 +60,7 @@ long	get_time_ms(void);
 void	ft_usleep(int ms);
 int		initialize(t_data *data, int argc, char **argv);
 t_philo	init_philo(int n, t_data *data);
-void	cycle(t_data *data);
+int		cycle(t_data *data);
 void	print_action(t_philo philo, int action);
 void	free_data(t_data *data);
 int		check_death(t_philo *philo);

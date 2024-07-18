@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 10:45:49 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/17 10:45:13 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:22:05 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	main(int argc, char **argv)
 		return (return_error("input error"));
 	if (initialize(&data, argc, argv) == 1)
 		return (return_error("failed to initialize data"));
-	cycle(&data);
+	if (cycle(&data) == 1)
+		return (return_error("thread error"));
 	return (0);
 }

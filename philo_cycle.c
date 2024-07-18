@@ -6,7 +6,7 @@
 /*   By: emichels <emichels@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:06:51 by emichels          #+#    #+#             */
-/*   Updated: 2024/07/17 12:30:28 by emichels         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:25:19 by emichels         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	take_fork(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork_l);
 	if (check_death(philo))
-		return (pthread_mutex_unlock(philo->fork_l), 0);
+	{
+		pthread_mutex_unlock(philo->fork_l);
+		return (0);
+	}
 	print_action(*philo, FORK);
 	pthread_mutex_lock(philo->fork_r);
 	if (check_death(philo))
@@ -58,7 +61,9 @@ int	take_fork(t_philo *philo)
 	print_action(*philo, EAT);
 	pthread_mutex_unlock(&philo->data->monitor);
 	ft_usleep(philo->data->t_toeat);
+	pthread_mutex_lock(&philo->data->monitor);
 	philo->n_eaten++;
+	pthread_mutex_unlock(&philo->data->monitor);
 	return (1);
 }
 
@@ -103,15 +108,21 @@ void	*routine(void *arg)
 	return (NULL);
 }
 
-void	cycle(t_data *data)
+int	cycle(t_data *data)
 {
 	int	i;
 
 	i = -1;
 	while (++i < data->n_philo)
 	{
-		pthread_create(&data->philo[i].thread, NULL, routine,
-			&data->philo[i]);
+		if (pthread_create(&data->philo[i].thread, NULL, routine,
+				&data->philo[i]) != 0)
+		{
+			while (--i > -1)
+				pthread_join(data->philo[i].thread, NULL);
+			free_data(data);
+			return (1);
+		}
 	}
 	while (1 && data->n_philo != 1)
 	{
@@ -123,4 +134,5 @@ void	cycle(t_data *data)
 	while (++i < data->n_philo)
 		pthread_join(data->philo[i].thread, NULL);
 	free_data(data);
+	return (0);
 }
